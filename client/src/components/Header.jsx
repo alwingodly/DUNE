@@ -30,7 +30,7 @@ function Header() {
           <Link to='Sign-in'>Sign In</Link> 
           </li>
           <li className="hidden sm:inline text-heading hover:underline">
-          <Link to='Sign-in'>Sign Up</Link> 
+          <Link to='sign-up'>Sign Up</Link> 
           </li>
         </ul>
       </div>
