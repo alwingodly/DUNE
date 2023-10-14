@@ -9,6 +9,8 @@ import bcrypt from 'bcrypt';
 
 authController.post('/signup', async(req , res , next)=>{
     try {
+      console.log('signup');
+      console.log(req.body);
       const{ username , email, password}  = req.body
       if (!username || !email || !password) {
         return res.status(400).json({ error: 'Please provide all required fields' });

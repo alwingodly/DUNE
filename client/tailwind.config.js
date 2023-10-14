@@ -9,10 +9,12 @@ export default {
    
         colors: {
           primary: '#b4bed6', 
+          primary2: '#7f8da6',
+          blackprimary: '#09090a',
+          blackprimary2:'#1f2024',
           secondary: '#3d4c5c',
-          heading: '#242736',
-          darkend: '#7f8da6',
-          dunegreen: '#348a4a'
+          heading: '#212a33',
+          dunegreen: '#348a4a',
         },
      
     },
