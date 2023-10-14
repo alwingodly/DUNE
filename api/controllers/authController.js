@@ -17,6 +17,7 @@ const validateSignUp = [
     .withMessage('Password must contain at least one special character'),
 ];
 
+
 authController.post('/signup', validateSignUp,  async(req , res , next)=>{
     try {
       const{ username , email, password}  = req.body
@@ -48,4 +49,11 @@ authController.post('/signup', validateSignUp,  async(req , res , next)=>{
     }
 })
 
+authController.post('/login', validateSignUp,  async(req , res , next)=>{
+  try {
+   
+  } catch (error) {
+     next(error)
+  }
+})
 export default authController;
