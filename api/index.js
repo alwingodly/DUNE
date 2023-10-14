@@ -1,6 +1,9 @@
 import express from 'express';
 import mongoose from 'mongoose';
 import dotenv from 'dotenv';
+import userController from './controllers/userController.js';
+import authController from './controllers/authController.js';
+
 dotenv.config();
 
 const app = express();
@@ -21,3 +24,17 @@ mongoose.connect(MONGODB_URI, {
 .catch((err) => {
     console.error('MongoDB connection error: ' + err);
 });
+
+app.use('/user',userController) 
+app.use('/auth',authController) 
+
+
+app.use((err , req , res , next)=>{
+    const statusCode = err.statusCode || 500
+    const message = err.message || 'Internal Server Error'
+    return res.status(statusCode).json({
+        success: false,
+        statusCode,
+        message,
+    })
+})
