@@ -15,6 +15,14 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  loginAttempts: {
+    type: Number,
+    default: 0, 
+  },
+  lockUntil: {
+    type: Date,
+    default: null, 
+  },
 }, {timestamps: true});
 
 const User = mongoose.model('User', userSchema);

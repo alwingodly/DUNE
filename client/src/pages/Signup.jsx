@@ -1,15 +1,18 @@
 import React, { useState } from "react";
 import building from '../assets/building.png';
-import { Link } from "react-router-dom";
+import {useDispatch , useSelector} from 'react-redux'
+import { Link , useNavigate } from "react-router-dom";
 import { FaSun, FaMoon } from 'react-icons/fa';
-
+import { useSpring, animated } from 'react-spring';
+import {themeChanger} from '../redux/userSlice'
 function Signup() {
   const [formData, setFormData] = useState({
     username: '',
     email: '',
     password: '',
   });
-  const [darkMode, setDarkMode] = useState(false);
+  const navigate = useNavigate()
+  const dispatch = useDispatch()
   const [error  , setError] = useState(null)
   const [loading , setLoading]= useState(false) 
   const handleChange = (e) => {
@@ -19,6 +22,7 @@ function Signup() {
       [name]: value,
     });
   };
+  const { darkMode } = useSelector((state) => state.user);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -43,8 +47,9 @@ function Signup() {
           setError(data.error)
           return
         }
-        console.log(data , 'get the data');
-    
+       else{
+        navigate('/', {replace:true})
+       }
       }
     } catch (error) {
       console.error('An error occurred:', error);
@@ -53,25 +58,33 @@ function Signup() {
       setLoading(false);
     }
   };
-  
-  
 
+  const bounceProps = useSpring({
+    from: { transform: 'translateY(-20px)', opacity: 0 },
+    to: { transform: 'translateY(0)', opacity: 1 },
+    config: { tension: 100, friction: 20 }, 
+  });
+  
   return (
     
     <div className={`${darkMode ? 'bg-primary' : 'bg-blackprimary'} min-h-screen flex flex-wrap`} style={{ backgroundImage: `url(${building})` }}>
      
       <div className="w-full lg:w-1/2 p-8 pt-4 flex flex-col items-center justify-center">
       <button
-          onClick={() => setDarkMode(!darkMode)}
+          onClick={() => dispatch(themeChanger())}
           className={`rounded-full p-2 ${darkMode ? 'bg-gray-800 text-white' : 'bg-gray-200 text-black'} focus:outline-none`}
         >
           <span className=" flex items-center justify-center">
             {darkMode ? <FaSun /> : <FaMoon />} 
           </span>
         </button>
-        <h2 className="text-3xl text-white font-semibold mb-2 pt-6">
-          Welcome to Dune
-        </h2>
+        <div>
+        <h2
+        className="text-3xl text-white font-semibold mb-2 pt-6"
+      >
+        Welcome to Dune
+      </h2>
+    </div>
        
         <p className="text-gray-200 text-lg text-center lg:pb-64">
           Discover the finest properties on Dune Estate. We cater to all buyers
@@ -84,8 +97,8 @@ function Signup() {
         <div className="text-center mb-6">
         {error && <p className="text-red-500">{error}</p>}
         </div>
-
-        <form className={`${darkMode ? 'bg-primary2' : 'bg-blackprimary2'} md:p-8 p-6 opacity-90 lg:opacity-80`} onSubmit={handleSubmit}>
+        <animated.h2 style={{...bounceProps,}}>
+        <form    className={`${darkMode ? 'bg-primary2' : 'bg-blackprimary2'} md:p-8 p-6 opacity-90 lg:opacity-80`} onSubmit={handleSubmit}>
         <h2 className="text-2xl font-bold mb-6 text-white text-center">
           Sign Up
         </h2>
@@ -136,7 +149,7 @@ function Signup() {
               Already have an account?{" "}
             </span>
             <Link
-              to="/login"
+              to="/Sign-in"
               className="text-dunegreen hover:underline remove-pseudo"
             >
               Login
@@ -158,6 +171,7 @@ function Signup() {
             </button>
           </div>
         </form>
+        </animated.h2>
       </div>
     </div>
   );
