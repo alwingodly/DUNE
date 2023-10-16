@@ -6,14 +6,14 @@ import { useSpring, animated } from 'react-spring';
 import {useDispatch , useSelector} from 'react-redux'
 import { themeChanger , toggleTimer } from "../redux/userSlice";
 
-function handleStorageChange(event) {
-  const dispatch = useDispatch();
+// function handleStorageChange(event) {
+//   const dispatch = useDispatch();
 
-  if (event.key === null) {
-    dispatch(toggleTimer())
-    alert("Local storage has been cleared. You may need to log in again.");
-  }
-}
+//   if (event.key === null) {
+//     dispatch(toggleTimer())
+//     alert("Local storage has been cleared. You may need to log in again.");
+//   }
+// }
 
 
 function Signin() {
@@ -119,13 +119,13 @@ function Signin() {
 
 
 
-  useEffect(() => {
+  // useEffect(() => {
     
-    window.addEventListener('storage', handleStorageChange);
-    return () => {
-      window.removeEventListener('storage', handleStorageChange);
-    };
-  }, []);
+  //   window.addEventListener('storage', handleStorageChange);
+  //   return () => {
+  //     window.removeEventListener('storage', handleStorageChange);
+  //   };
+  // }, []);
   return (
     
     <div className={`${darkMode ? 'bg-primary' : 'bg-blackprimary'} min-h-screen flex flex-wrap`} style={{ backgroundImage: `url(${building})` }}>

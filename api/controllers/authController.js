@@ -2,7 +2,9 @@ import { Router } from 'express';
 const authController = Router();
 import User from '../models/userModel.js';
 import bcrypt from 'bcrypt';
-
+import jwt from 'jsonwebtoken'
+import dotenv from 'dotenv';
+dotenv.config();
 authController.post('/signup', async(req , res , next)=>{
     try {
       const{ username , email, password}  = req.body
@@ -25,7 +27,8 @@ authController.post('/signup', async(req , res , next)=>{
     const newUser = new User({ username, email, password: hashedPassword });
     await newUser.save();
     const { password: _, ...sanitizedUser } = newUser._doc;
-    res.status(201).json(sanitizedUser);
+    const token = jwt.sign({ id: newUser._id }, process.env.JWT_SECRET, { expiresIn: '5h' });
+    res.status(201).json({ user: sanitizedUser, token });
     } catch (error) {
        next(error)
     }
@@ -65,15 +68,14 @@ authController.post('/signin', async (req, res, next) => {
       return res.status(400).json({ error: 'Incorrect password' });
     }
     
-    if(user && comparePass){
+    if (user && comparePass) {
       user.loginAttempts = 0;
       user.lockUntil = null;
       await user.save();
+      const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: '5h' });
       const { password: _, ...userData } = user._doc;
-      return res.status(200).json(userData);
+      return res.status(200).json({ user: userData, token });
     }
-
-   
   } catch (error) {
     next(error);
   }
