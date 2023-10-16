@@ -4,7 +4,7 @@ import {useDispatch , useSelector} from 'react-redux'
 import { Link , useNavigate } from "react-router-dom";
 import { FaSun, FaMoon } from 'react-icons/fa';
 import { useSpring, animated } from 'react-spring';
-import {themeChanger} from '../redux/userSlice'
+import {themeChanger , userDetails} from '../redux/userSlice'
 function Signup() {
   const [formData, setFormData] = useState({
     username: '',
@@ -36,18 +36,17 @@ function Signup() {
           method: 'POST',
           body: JSON.stringify(formData),
         });
+        const data = await res.json();
        
       if (res.success === false) {
-        const data = await res.json();
         setError(data.message || 'An error occurred while processing your request.');
       } else {
-        
-        const data = await res.json();
-        if(data.error){
+                if(data.error){
           setError(data.error)
           return
         }
        else{
+        dispatch(userDetails(data))
         navigate('/', {replace:true})
        }
       }

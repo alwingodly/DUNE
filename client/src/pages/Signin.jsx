@@ -4,7 +4,7 @@ import { Link , useNavigate } from "react-router-dom";
 import { FaSun, FaMoon } from 'react-icons/fa';
 import { useSpring, animated } from 'react-spring';
 import {useDispatch , useSelector} from 'react-redux'
-import { themeChanger , toggleTimer } from "../redux/userSlice";
+import { themeChanger , toggleTimer , userDetails } from "../redux/userSlice";
 
 // function handleStorageChange(event) {
 //   const dispatch = useDispatch();
@@ -44,6 +44,7 @@ function Signin() {
           'Content-Type': 'application/json',
         },
         method: 'POST',
+        credentials: 'include',
         body: JSON.stringify(formData),
       });
 
@@ -60,6 +61,7 @@ function Signin() {
           setError(data.error);
           return;
         }else{
+          dispatch(userDetails(data))
           navigate('/', { replace: true });
         }
        
@@ -133,10 +135,10 @@ function Signin() {
       <div className="w-full lg:w-1/2 p-8 pt-4 flex flex-col items-center justify-center">
       <button
          onClick={() => dispatch(themeChanger())}
-          className={`rounded-full p-2 ${darkMode ? 'bg-gray-800 text-white' : 'bg-gray-200 text-black'} focus:outline-none`}
+          className={`rounded-full p-2 ${darkMode ? 'bg-primary text-orange-300 text-8xl' : 'bg-blackprimary text-primary text-8xl'} focus:outline-none`}
         >
           <span className=" flex items-center justify-center">
-            {darkMode ? <FaSun /> : <FaMoon />} 
+            {darkMode ? <FaSun/> : <FaMoon />} 
           </span>
         </button>
         <div>
@@ -144,7 +146,7 @@ function Signin() {
         className="text-3xl text-white font-semibold mb-2 pt-6"
       >
         Welcome to Dune
-      </h2>
+      </h2> 
     </div>
        
         <p className="text-gray-200 text-lg text-center lg:pb-64">

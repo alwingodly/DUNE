@@ -2,7 +2,8 @@ import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
     darkMode: false,
-    timers: false
+    timers: false,
+    currentUser: null,
 };
 
 export const userSlice = createSlice({
@@ -14,10 +15,13 @@ export const userSlice = createSlice({
     },
     toggleTimer(state){
       state.timers = !state.timers
+    },
+    userDetails(state , action){
+      state.currentUser = action.payload.user;
     }
   }
 });
 
-export const { themeChanger , toggleTimer } = userSlice.actions;
+export const { themeChanger , toggleTimer , userDetails } = userSlice.actions;
 
 export default userSlice.reducer;
