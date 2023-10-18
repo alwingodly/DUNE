@@ -5,7 +5,8 @@ import { FaSun, FaMoon } from 'react-icons/fa';
 import { useSpring, animated } from 'react-spring';
 import {useDispatch , useSelector} from 'react-redux'
 import { themeChanger , toggleTimer , userDetails } from "../redux/userSlice";
-
+import {GoogleAuthProvider , getAuth, signInWithPopup} from 'firebase/auth'
+import {app} from '../firebase'
 // function handleStorageChange(event) {
 //   const dispatch = useDispatch();
 
@@ -128,6 +129,32 @@ function Signin() {
   //     window.removeEventListener('storage', handleStorageChange);
   //   };
   // }, []);
+  const handleGoogle = (async()=>{
+    
+    try {
+      console.log('hi');
+      const provider = new GoogleAuthProvider()
+      const auth = getAuth(app)
+      const result = await signInWithPopup(auth , provider)
+      const res = await fetch('http://localhost:5000/auth/google',{
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          name: result.user.displayName,
+          email: result.user.email,
+          photo: result.user.photoURL,
+        }),
+      })
+      const data = await res.json()
+      console.log(data , 'data');
+      dispatch(userDetails(data))
+      navigate('/', {replace:true})
+    } catch (error) {
+      console.log('login with google failed' , error);
+    }
+    })
   return (
     
     <div className={`${darkMode ? 'bg-primary' : 'bg-blackprimary'} min-h-screen flex flex-wrap`} style={{ backgroundImage: `url(${building})` }}>
@@ -135,7 +162,7 @@ function Signin() {
       <div className="w-full lg:w-1/2 p-8 pt-4 flex flex-col items-center justify-center">
       <button
          onClick={() => dispatch(themeChanger())}
-          className={`rounded-full p-2 ${darkMode ? 'bg-primary text-orange-300 text-8xl' : 'bg-blackprimary text-primary text-8xl'} focus:outline-none`}
+          className={`rounded-full p-2 ${darkMode ? 'bg-primary text-orange-300 lg:text-9xl text-6xl' : 'bg-blackprimary text-primary lg:text-9xl text-6xl'} focus:outline-none`}
         >
           <span className=" flex items-center justify-center">
             {darkMode ? <FaSun/> : <FaMoon />} 
@@ -218,6 +245,7 @@ function Signin() {
           <div className="flex justify-center items-center mt-6">
             <button
               type="button"
+              onClick={handleGoogle}
               className="bg-white text-black px-4 py-2 rounded hover:bg-gray-100 focus:outline-none focus:ring w-full lg:w-96 focus:ring-gray-400 justify-center text-center flex items-center"
             >
               <img
